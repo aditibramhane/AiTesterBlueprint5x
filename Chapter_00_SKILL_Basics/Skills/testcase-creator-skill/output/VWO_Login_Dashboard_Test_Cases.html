@@ -1,0 +1,630 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Manual test cases for the VWO Login Dashboard, derived from the supplied PRD.">
+  <title>VWO Login Dashboard — Test Cases</title>
+  <style>
+    :root {
+      --ink: #17233b;
+      --muted: #52617a;
+      --brand: #5140bc;
+      --line: #dce3ef;
+      --wash: #f4f6fb;
+      --accent: #ebe8ff;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; color: var(--ink); background: #edf0f6; font: 14px/1.5 "Segoe UI", Arial, sans-serif; }
+    .document { width: min(100% - 32px, 1100px); margin: 28px auto; padding: 58px 66px; background: #fff; box-shadow: 0 10px 38px #1b264326; }
+    .cover { min-height: 520px; display: flex; flex-direction: column; justify-content: space-between; padding-bottom: 30px; border-bottom: 4px solid var(--brand); page-break-after: always; }
+    .eyebrow { color: var(--brand); font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+    h1 { margin: 18px 0; font-size: clamp(40px, 7vw, 62px); line-height: 1.05; letter-spacing: -.04em; }
+    h2 { margin: 34px 0 14px; padding-bottom: 8px; border-bottom: 1px solid var(--line); color: var(--brand); font-size: 23px; page-break-after: avoid; }
+    h3 { margin: 24px 0 7px; font-size: 17px; page-break-after: avoid; }
+    p { margin: 8px 0 12px; }
+    .subtitle { color: var(--muted); font-size: 19px; }
+    .meta { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; max-width: 720px; }
+    .meta div { border-top: 1px solid var(--line); padding-top: 8px; }
+    .meta strong { display: block; color: var(--muted); font-size: 10px; text-transform: uppercase; letter-spacing: .08em; }
+    .callout { margin: 16px 0; padding: 13px 16px; border-left: 4px solid var(--brand); background: var(--wash); }
+    .index { columns: 2; column-gap: 32px; padding-left: 22px; }
+    .index li { margin: 4px 0; break-inside: avoid; }
+    .group { break-before: page; }
+    .case { margin: 20px 0 28px; padding: 16px; border: 1px solid var(--line); border-radius: 7px; break-inside: avoid-page; }
+    .case h3 { margin-top: 0; }
+    .case-meta { display: flex; flex-wrap: wrap; gap: 7px; margin: 8px 0 12px; }
+    .pill { display: inline-block; padding: 2px 8px; border-radius: 99px; color: #38258e; background: var(--accent); font-size: 10px; font-weight: 700; }
+    table { width: 100%; margin: 10px 0; border-collapse: collapse; font-size: 11px; }
+    th, td { padding: 7px 8px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+    th { color: #38258e; background: var(--wash); }
+    .execution { margin-top: 10px; color: var(--muted); font-size: 11px; }
+    ul, ol { padding-left: 22px; }
+    li { margin: 4px 0; }
+    footer { margin-top: 38px; padding-top: 10px; border-top: 1px solid var(--line); color: var(--muted); font-size: 10px; }
+    @media (max-width: 700px) {
+      .document { width: 100%; margin: 0; padding: 28px 18px; box-shadow: none; }
+      .index { columns: 1; }
+      .case { padding: 11px; }
+      table { font-size: 10px; }
+      th, td { padding: 5px; }
+    }
+    @media print {
+      @page { size: A4; margin: 14mm 12mm; }
+      body { background: white; font-size: 9pt; }
+      .document { width: auto; margin: 0; padding: 0; box-shadow: none; }
+      .cover { min-height: 255mm; }
+      .case { break-inside: avoid-page; }
+      .case-meta, th, .callout { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+<main class="document">
+  <header class="cover">
+    <div>
+      <div class="eyebrow">Quality Assurance · Manual Test Suite</div>
+      <h1>VWO Login Dashboard</h1>
+      <p class="subtitle">Test Cases</p>
+      <p>Requirement-linked cases for authentication, recovery, sessions, user experience, accessibility, security, integrations, and performance.</p>
+    </div>
+    <div class="meta">
+      <div><strong>Suite version</strong>1.0</div>
+      <div><strong>Prepared</strong>22 November 2026</div>
+      <div><strong>Source</strong>VWO Login Dashboard PRD supplied with this request</div>
+      <div><strong>Execution</strong>Manual; enter results in the per-step fields</div>
+    </div>
+  </header>
+
+  <section>
+    <h2>How to use this suite</h2>
+    <p>Requirement IDs below are traceability labels created for this suite and refer to the corresponding topics in the supplied PRD; they are not external product ticket IDs. Use only approved QA/pre-production environments and synthetic test identities. Do not write real passwords, reset tokens, session cookies, or personal data into test records or evidence.</p>
+    <div class="callout"><strong>Configuration-dependent coverage:</strong> Execute MFA, SSO, social login, high-contrast/theme options, rate-limit, timeout, and load scenarios only when those features/configurations are available and approved. Where the PRD does not specify a value or behavior, confirm the applicable product/security policy before assigning pass/fail; do not infer it.</div>
+    <p><strong>Priority:</strong> P0 = critical access/security path; P1 = important product requirement; P2 = supporting or conditional requirement. “Actual result,” “status,” and “defect/evidence” are intentionally blank for execution.</p>
+    <h2>Case index</h2>
+    <ol class="index">
+      <li>TC-VWO-001 — Login page rendering and branding</li>
+      <li>TC-VWO-002 — Initial focus and clickable labels</li>
+      <li>TC-VWO-003 — Email format validation on blur</li>
+      <li>TC-VWO-004 — Required login field validation</li>
+      <li>TC-VWO-005 — Password entry and requirement feedback</li>
+      <li>TC-VWO-006 — Successful email/password login</li>
+      <li>TC-VWO-007 — Rejected authentication and error clarity</li>
+      <li>TC-VWO-008 — Authentication loading and repeat submission</li>
+      <li>TC-VWO-009 — Remember Me enabled</li>
+      <li>TC-VWO-010 — Remember Me disabled</li>
+      <li>TC-VWO-011 — Configured session timeout</li>
+      <li>TC-VWO-012 — MFA successful challenge</li>
+      <li>TC-VWO-013 — MFA failure and cancellation</li>
+      <li>TC-VWO-014 — Enterprise SSO successful sign-in</li>
+      <li>TC-VWO-015 — SSO cancellation and provider error</li>
+      <li>TC-VWO-016 — Password reset request</li>
+      <li>TC-VWO-017 — Reset token validity and reuse</li>
+      <li>TC-VWO-018 — Password policy enforcement</li>
+      <li>TC-VWO-019 — Free-trial registration link</li>
+      <li>TC-VWO-020 — Post-login destination and return context</li>
+      <li>TC-VWO-021 — Responsive layout and touch interaction</li>
+      <li>TC-VWO-022 — Light/dark theme behavior</li>
+      <li>TC-VWO-023 — Keyboard-only operation</li>
+      <li>TC-VWO-024 — Screen-reader labels and status feedback</li>
+      <li>TC-VWO-025 — Contrast and high-contrast usability</li>
+      <li>TC-VWO-026 — HTTPS enforcement</li>
+      <li>TC-VWO-027 — Credential and session-data protection</li>
+      <li>TC-VWO-028 — Authentication rate limiting</li>
+      <li>TC-VWO-029 — Privacy and audit handling</li>
+      <li>TC-VWO-030 — Login analytics events</li>
+      <li>TC-VWO-031 — Login support path</li>
+      <li>TC-VWO-032 — Login page load-time target</li>
+      <li>TC-VWO-033 — Concurrent login capacity</li>
+      <li>TC-VWO-034 — Availability and regional access evidence</li>
+      <li>TC-VWO-035 — Browser and device compatibility</li>
+      <li>TC-VWO-036 — Optional social login</li>
+      <li>TC-VWO-037 — Asset delivery and optimization</li>
+      <li>TC-VWO-038 — Authentication dependency failure recovery</li>
+    </ol>
+  </section>
+
+  <section class="group">
+    <h2>Functional authentication and recovery</h2>
+
+    <article class="case" id="tc-001">
+      <h3>TC-VWO-001 — Login page rendering and branding</h3>
+      <div class="case-meta"><span class="pill">REQ: Existing UI / Branding</span><span class="pill">Functional · UI</span><span class="pill">P1</span></div>
+      <p><strong>Objective:</strong> Verify the login entry point presents its required controls and VWO branding.</p>
+      <p><strong>Preconditions:</strong> Approved test environment is available; browser is at a clean login session.</p>
+      <table><thead><tr><th>#</th><th>Action</th><th>Test data</th><th>Expected result</th><th>Actual result</th><th>Status</th><th>Defect / evidence</th></tr></thead><tbody>
+        <tr><td>1</td><td>Open the approved VWO login URL.</td><td>QA/pre-production URL</td><td>Page renders without a blocking error; VWO branding, email and password fields, Remember Me option, sign-in control, free-trial path, and product announcement are present as configured.</td><td></td><td></td><td></td></tr>
+        <tr><td>2</td><td>Inspect the initial layout and visible text.</td><td>Desktop viewport</td><td>Content is readable, controls are distinguishable, and there is no unintended overlap or broken branding asset.</td><td></td><td></td><td></td></tr>
+      </tbody></table>
+      <p class="execution"><strong>Environment/build:</strong> ______ &nbsp; <strong>Browser/OS:</strong> ______ &nbsp; <strong>Executed by/date:</strong> ______</p>
+    </article>
+
+    <article class="case" id="tc-002">
+      <h3>TC-VWO-002 — Initial focus and clickable labels</h3>
+      <div class="case-meta"><span class="pill">REQ: Auto-focus / Clickable labels</span><span class="pill">Usability · Accessibility</span><span class="pill">P1</span></div>
+      <p><strong>Objective:</strong> Check the first-input focus behavior and whether form labels activate their associated fields.</p>
+      <p><strong>Preconditions:</strong> Login page is open with no modal or browser prompt obscuring it.</p>
+      <table><thead><tr><th>#</th><th>Action</th><th>Test data</th><th>Expected result</th><th>Actual result</th><th>Status</th><th>Defect / evidence</th></tr></thead><tbody>
+        <tr><td>1</td><td>Load or reload the login page and observe the initial focus.</td><td>Fresh page load</td><td>Focus starts at the first input field as specified, without unexpected focus being placed on a hidden or unrelated control.</td><td></td><td></td><td></td></tr>
+        <tr><td>2</td><td>Click the visible email label, then the password label.</td><td>Mouse/pointer</td><td>Each label focuses or activates its corresponding input field.</td><td></td><td></td><td></td></tr>
+      </tbody></table>
+      <p class="execution"><strong>Environment/build:</strong> ______ &nbsp; <strong>Browser/OS:</strong> ______ &nbsp; <strong>Executed by/date:</strong> ______</p>
+    </article>
+
+    <article class="case" id="tc-003">
+      <h3>TC-VWO-003 — Email format validation on blur</h3>
+      <div class="case-meta"><span class="pill">REQ: Real-time validation / Email format</span><span class="pill">Functional · Boundary</span><span class="pill">P1</span></div>
+      <p><strong>Objective:</strong> Verify email format feedback when the email field loses focus.</p>
+      <p><strong>Preconditions:</strong> Login page is open; test data is synthetic.</p>
+      <table><thead><tr><th>#</th><th>Action</th><th>Test data</th><th>Expected result</th><th>Actual result</th><th>Status</th><th>Defect / evidence</th></tr></thead><tbody>
+        <tr><td>1</td><td>Enter a syntactically valid test email and move focus to another control.</td><td>qa.user@example.test</td><td>No invalid-format error is shown for a valid format.</td><td></td><td></td><td></td></tr>
+        <tr><td>2</td><td>Enter a malformed address and move focus away.</td><td>qa.user.example.test; qa@; @example.test</td><td>Field validation provides timely, understandable feedback and identifies the email field; the form does not treat the malformed value as a valid address.</td><td></td><td></td><td></td></tr>
+        <tr><td>3</td><td>Correct the address and move focus away again.</td><td>qa.user@example.test</td><td>Stale validation feedback clears or updates appropriately.</td><td></td><td></td><td></td></tr>
+      </tbody></table>
+      <p class="execution"><strong>Environment/build:</strong> ______ &nbsp; <strong>Browser/OS:</strong> ______ &nbsp; <strong>Executed by/date:</strong> ______</p>
+    </article>
+
+    <article class="case" id="tc-004">
+      <h3>TC-VWO-004 — Required login field validation</h3>
+      <div class="case-meta"><span class="pill">REQ: Input validation / Error handling</span><span class="pill">Functional · Negative</span><span class="pill">P0</span></div>
+      <p><strong>Objective:</strong> Verify incomplete login submissions are safely prevented and clearly explained.</p>
+      <p><strong>Preconditions:</strong> Login page is open; no authenticated session is active.</p>
+      <table><thead><tr><th>#</th><th>Action</th><th>Test data</th><th>Expected result</th><th>Actual result</th><th>Status</th><th>Defect / evidence</th></tr></thead><tbody>
+        <tr><td>1</td><td>Submit with both fields empty.</td><td>Email: blank; password: blank</td><td>Authentication is not granted; actionable field/form feedback is displayed.</td><td></td><td></td><td></td></tr>
+        <tr><td>2</td><td>Enter a valid-format email only and submit.</td><td>Password: blank</td><td>Authentication is not granted; missing password is identified without clearing unrelated input unexpectedly.</td><td></td><td></td><td></td></tr>
+        <tr><td>3</td><td>Enter a password only and submit.</td><td>Email: blank</td><td>Authentication is not granted; missing email is identified with clear feedback.</td><td></td><td></td><td></td></tr>
+      </tbody></table>
+      <p class="execution"><strong>Environment/build:</strong> ______ &nbsp; <strong>Browser/OS:</strong> ______ &nbsp; <strong>Executed by/date:</strong> ______</p>
+    </article>
+
+    <article class="case" id="tc-005">
+      <h3>TC-VWO-005 — Password entry and requirement feedback</h3>
+      <div class="case-meta"><span class="pill">REQ: Password strength indicators / Password requirements</span><span class="pill">Functional · Usability</span><span class="pill">P1</span></div>
+      <p><strong>Objective:</strong> Verify password entry handling and any displayed password requirement/strength feedback.</p>
+      <p><strong>Preconditions:</strong> Login and password-reset flows are available; password policy is documented by product/security.</p>
+      <table><thead><tr><th>#</th><th>Action</th><th>Test data</th><th>Expected result</th><th>Actual result</th><th>Status</th><th>Defect / evidence</th></tr></thead><tbody>
+        <tr><td>1</td><td>Enter a synthetic password in the login field.</td><td>Use approved test-account secret; do not record it</td><td>Password input is accepted securely; any visual treatment follows the approved design and does not expose the secret unintentionally.</td><td></td><td></td><td></td></tr>
+        <tr><td>2</td><td>On the password creation/reset screen, enter values that meet and fail the published requirements.</td><td>Use synthetic values covering each documented rule and boundary</td><td>Requirements and strength feedback (if provided) update clearly and consistently with the documented password policy. Undocumented thresholds are not assumed.</td><td></td><td></td><td></td></tr>
+      </tbody></table>
+      <p class="execution"><strong>Environment/build:</strong> ______ &nbsp; <strong>Browser/OS:</strong> ______ &nbsp; <strong>Executed by/date:</strong> ______</p>
+    </article>
+
+    <article class="case" id="tc-006">
+      <h3>TC-VWO-006 — Successful email/password login</h3>
+      <div class="case-meta"><span class="pill">REQ: Primary authentication / Dashboard transition</span><span class="pill">Functional · E2E</span><span class="pill">P0</span></div>
+      <p><strong>Objective:</strong> Confirm a valid account can authenticate and transition to the VWO platform.</p>
+      <p><strong>Preconditions:</strong> Active synthetic account is available in the approved environment; MFA is either disabled for this account or its challenge is covered by the MFA cases.</p>
+      <table><thead><tr><th>#</th><th>Action</th><th>Test data</th><th>Expected result</th><th>Actual result</th><th>Status</th><th>Defect / evidence</th></tr></thead><tbody>
+        <tr><td>1</td><td>Enter the approved test account's credentials and submit.</td><td>Credential vault reference only; never copy secret to report</td><td>Credentials are accepted; processing feedback is visible while authentication is in progress.</td><td></td><td></td><td></td></tr>
+        <tr><td>2</td><td>Wait for authentication to complete.</td><td>Approved synthetic account</td><td>User receives a clear success transition to the VWO dashboard or assigned destination; no login error remains visible.</td><td></td><td></td><td></td></tr>
+      </tbody></table>
+      <p class="execution"><strong>Environment/build:</strong> ______ &nbsp; <strong>Browser/OS:</strong> ______ &nbsp; <strong>Executed by/date:</strong> ______</p>
+    </article>
+
+    <article class="case" id="tc-007">
+      <h3>TC-VWO-007 — Rejected authentication and error clarity</h3>
+      <div class="case-meta"><span class="pill">REQ: Authentication / Actionable errors</span><span class="pill">Functional · Negative · Security</span><span class="pill">P0</span></div>
+      <p><strong>Objective:</strong> Verify invalid credentials do not authenticate and produce safe, actionable error handling.</p>
+      <p><strong>Preconditions:</strong> Approved environment; synthetic test identity and invalid test secret; account is not a real user account.</p>
+      <table><thead><tr><th>#</th><th>Action</th><th>Test data</th><th>Expected result</th><th>Actual result</th><th>Status</th><th>Defect / evidence</th></tr></thead><tbody>
+        <tr><td>1</td><td>Submit a known synthetic account with an incorrect password.</td><td>Credential vault test identity; intentionally incorrect secret</td><td>Access is denied; the user sees clear recovery guidance without disclosure of secret or internal error detail.</td><td></td><td></td><td></td></tr>
+        <tr><td>2</td><td>Where policy permits, compare the response for an unknown synthetic address with the invalid-password response.</td><td>Nonexistent reserved test-domain address</td><td>Both outcomes follow the approved account-enumeration policy and remain understandable. If the policy is unspecified, record for product/security clarification instead of assuming identical text.</td><td></td><td></td><td></td></tr>
+      </tbody></table>
+      <p class="execution"><strong>Environment/build:</strong> ______ &nbsp; <strong>Browser/OS:</strong> ______ &nbsp; <strong>Executed by/date:</strong> ______</p>
+    </article>
+
+    <article class="case" id="tc-008">
+      <h3>TC-VWO-008 — Authentication loading and repeat submission</h3>
+      <div class="case-meta"><span class="pill">REQ: Loading states</span><span class="pill">Functional · Usability</span><span class="pill">P1</span></div>
+      <p><strong>Objective:</strong> Verify visible processing feedback and avoid accidental repeated sign-in submissions.</p>
+      <p><strong>Preconditions:</strong> Approved environment; valid synthetic account; normal network connection.</p>
+      <table><thead><tr><th>#</th><th>Action</th><th>Test data</th><th>Expected result</th><th>Actual result</th><th>Status</th><th>Defect / evidence</th></tr></thead><tbody>
+        <tr><td>1</td><td>Submit valid credentials and observe the form while the request is processing.</td><td>Approved synthetic account</td><td>A clear loading state is shown; controls communicate processing state.</td><td></td><td></td><td></td></tr>
+        <tr><td>2</td><td>During the loading state, attempt to activate submit again.</td><td>Repeated click/keypress during the same request</td><td>Duplicate activation does not create unintended repeated authentication actions; the user receives one coherent completion/error outcome.</td><td></td><td></td><td></td></tr>
+      </tbody></table>
+      <p class="execution"><strong>Environment/build:</strong> ______ &nbsp; <strong>Browser/OS:</strong> ______ &nbsp; <strong>Executed by/date:</strong> ______</p>
+    </article>
+
+    <article class="case" id="tc-009">
+      <h3>TC-VWO-009 — Remember Me enabled</h3>
+      <div class="case-meta"><span class="pill">REQ: Remember Me / Session management</span><span class="pill">Functional · Session</span><span class="pill">P1</span></div>
+      <p><strong>Objective:</strong> Check persistent-session behavior when Remember Me is selected.</p>
+      <p><strong>Preconditions:</strong> Approved test account; documented persistence and timeout policy; isolated browser profile.</p>
+      <table><thead><tr><th>#</th><th>Action</th><th>Test data</th><th>Expected result</th><th>Actual result</th><th>Status</th><th>Defect / evidence</th></tr></thead><tbody>
+        <tr><td>1</td><td>Select Remember Me and sign in successfully.</td><td>Approved synthetic account; Remember Me: selected</td><td>Login succeeds and session persistence follows the configured policy.</td><td></td><td></td><td></td></tr>
+        <tr><td>2</td><td>Close and reopen the browser, then revisit the VWO entry point within the configured persistence window.</td><td>Same isolated browser profile</td><td>Observed access behavior matches the approved Remember Me policy; no credentials are exposed in the page or URL.</td><td></td><td></td><td></td></tr>
+      </tbody></table>
+      <p class="execution"><strong>Environment/build:</strong> ______ &nbsp; <strong>Browser/OS:</strong> ______ &nbsp; <strong>Executed by/date:</strong> ______</p>
+    </article>
+
+    <article class="case" id="tc-010">
+      <h3>TC-VWO-010 — Remember Me disabled</h3>
+      <div class="case-meta"><span class="pill">REQ: Remember Me / Session management</span><span class="pill">Functional · Session</span><span class="pill">P1</span></div>
+      <p><strong>Objective:</strong> Check session behavior when Remember Me is not selected.</p>
+      <p><strong>Preconditions:</strong> Approved test account; documented default session policy; clean isolated browser profile.</p>
+      <table><thead><tr><th>#</th><th>Action</th><th>Test data</th><th>Expected result</th><th>Actual result</th><th>Status</th><th>Defect / evidence</th></tr></thead><tbody>
+        <tr><td>1</td><td>Sign in without selecting Remember Me.</td><td>Approved synthetic account; Remember Me: not selected</td><td>Login succeeds and session lifetime follows the non-persistent/default policy.</td><td></td><td></td><td></td></tr>
+        <tr><td>2</td><td>End the browser session and revisit the login entry point.</td><td>Same isolated browser profile</td><td>Observed behavior matches the documented policy; no unsupported persistent access occurs.</td><td></td><td></td><td></td></tr>
+      </tbody></table>
+      <p class="execution"><strong>Environment/build:</strong> ______ &nbsp; <strong>Browser/OS:</strong> ______ &nbsp; <strong>Executed by/date:</strong> ______</p>
+    </article>
+
+    <article class="case" id="tc-011">
+      <h3>TC-VWO-011 — Configured session timeout</h3>
+      <div class="case-meta"><span class="pill">REQ: Configurable session timeout</span><span class="pill">Functional · Security</span><span class="pill">P0</span></div>
+      <p><strong>Objective:</strong> Verify an authenticated session expires according to the configured timeout.</p>
+      <p><strong>Preconditions:</strong> Timeout value and inactivity/absolute expiration rules are confirmed; approved test account and environment are available.</p>
+      <table><thead><tr><th>#</th><th>Action</th><th>Test data</th><th>Expected result</th><th>Actual result</th><th>Status</th><th>Defect / evidence</th></tr></thead><tbody>
+        <tr><td>1</td><td>Sign in and remain inactive for the documented timeout interval.</td><td>Configured timeout value</td><td>Session expires at the documented boundary, subject to the stated tolerance and policy.</td><td></td><td></td><td></td></tr>
+        <tr><td>2</td><td>Attempt to open a protected VWO destination after expiration.</td><td>Expired test session</td><td>Protected access is not retained; user is directed through the approved re-authentication flow without sensitive error details.</td><td></td><td></td><td></td></tr>
+      </tbody></table>
+      <p class="execution"><strong>Environment/build:</strong> ______ &nbsp; <strong>Browser/OS:</strong> ______ &nbsp; <strong>Executed by/date:</strong> ______</p>
+    </article>
+  </section>
+
+  <section class="group">
+    <h2>MFA, SSO, password recovery, and user journeys</h2>
+
+    <article class="case" id="tc-012">
+      <h3>TC-VWO-012 — MFA successful challenge</h3>
+      <div class="case-meta"><span class="pill">REQ: Optional multi-factor authentication</span><span class="pill">Functional · Integration · E2E</span><span class="pill">P1</span></div>
+      <p><strong>Objective:</strong> Verify the configured MFA path completes after primary authentication.</p>
+      <p><strong>Preconditions:</strong> MFA is enabled for a dedicated synthetic account; approved challenge method and test procedure are available.</p>
+      <table><thead><tr><th>#</th><th>Action</th><th>Test data</th><th>Expected result</th><th>Actual result</th><th>Status</th><th>Defect / evidence</th></tr></thead><tbody>
+        <tr><td>1</td><td>Submit valid primary credentials.</td><td>MFA-enabled synthetic account</td><td>Primary authentication proceeds to the configured second-factor challenge.</td><td></td><td></td><td></td></tr>
+        <tr><td>2</td><td>Complete the challenge using the approved test method.</td><td>Authorized test challenge only</td><td>Challenge succeeds and user reaches the authorized VWO destination.</td><td></td><td></td><td></td></tr>
+      </tbody></table>
+      <p class="execution"><strong>Environment/build:</strong> ______ &nbsp; <strong>Browser/OS:</strong> ______ &nbsp; <strong>Executed by/date:</strong> ______</p>
+    </article>
+
+    <article class="case" id="tc-013">
+      <h3>TC-VWO-013 — MFA failure and cancellation</h3>
+      <div class="case-meta"><span class="pill">REQ: Optional multi-factor authentication / Error recovery</span><span class="pill">Functional · Negative</span><span class="pill">P1</span></div>
+      <p><strong>Objective:</strong> Ensure unsuccessful or cancelled MFA does not grant access and provides a recoverable outcome.</p>
+      <p><strong>Preconditions:</strong> MFA is enabled for a dedicated synthetic account; approved test challenge is available.</p>
+      <table><thead><tr><th>#</th><th>Action</th><th>Test data</th><th>Expected result</th><th>Actual result</th><th>Status</th><th>Defect / evidence</th></tr></thead><tbody>
+        <tr><td>1</td><td>Submit valid primary credentials, then provide an invalid test challenge response.</td><td>Invalid synthetic challenge response</td><td>Authentication is not completed; feedback is clear and does not disclose secrets or internal system details.</td><td></td><td></td><td></td></tr>
+        <tr><td>2</td><td>Cancel or leave the challenge using its supported cancel/back control.</td><td>Configured MFA flow</td><td>No authenticated access is granted; the user receives the configured safe recovery or restart option.</td><td></td><td></td><td></td></tr>
+      </tbody></table>
+      <p class="execution"><strong>Environment/build:</strong> ______ &nbsp; <strong>Browser/OS:</strong> ______ &nbsp; <strong>Executed by/date:</strong> ______</p>
+    </article>
+
+    <article class="case" id="tc-014">
+      <h3>TC-VWO-014 — Enterprise SSO successful sign-in</h3>
+      <div class="case-meta"><span class="pill">REQ: Enterprise SSO (SAML/OAuth as configured)</span><span class="pill">Integration · E2E</span><span class="pill">P1</span></div>
+      <p><strong>Objective:</strong> Verify successful SSO hand-off and return to VWO for a configured organizational account.</p>
+      <p><strong>Preconditions:</strong> An approved SSO provider and test organization/account are configured in the environment.</p>
+      <table><thead><tr><th>#</th><th>Action</th><th>Test data</th><th>Expected result</th><th>Actual result</th><th>Status</th><th>Defect / evidence</th></tr></thead><tbody>
+        <tr><td>1</td><td>Choose the configured enterprise sign-in option.</td><td>Approved organization test account</td><td>User is directed to the expected identity-provider flow over a secure connection.</td><td></td><td></td><td></td></tr>
+        <tr><td>2</td><td>Complete provider authentication with the authorized synthetic identity.</td><td>Provider test credentials held in approved vault</td><td>Successful authentication returns to VWO and grants access only to the authorized test account/destination.</td><td></td><td></td><td></td></tr>
+      </tbody></table>
+      <p class="execution"><strong>Environment/build:</strong> ______ &nbsp; <strong>Browser/OS:</strong> ______ &nbsp; <strong>Executed by/date:</strong> ______</p>
+    </article>
+
+    <article class="case" id="tc-015">
+      <h3>TC-VWO-015 — SSO cancellation and provider error</h3>
+      <div class="case-meta"><span class="pill">REQ: Enterprise SSO / Error handling</span><span class="pill">Integration · Negative</span><span class="pill">P1</span></div>
+      <p><strong>Objective:</strong> Verify SSO cancellation and configured provider errors do not create an authenticated session.</p>
+      <p><strong>Preconditions:</strong> SSO is configured in an approved test environment; provider can supply a controlled cancellation/error outcome.</p>
+      <table><thead><tr><th>#</th><th>Action</th><th>Test data</th><th>Expected result</th><th>Actual result</th><th>Status</th><th>Defect / evidence</th></tr></thead><tbody>
+        <tr><td>1</td><td>Start SSO and cancel at the identity provider.</td><td>Authorized test account; user-initiated cancellation</td><td>User returns to a safe VWO state; no protected access/session is granted.</td><td></td><td></td><td></td></tr>
+        <tr><td>2</td><td>Repeat using an approved provider error/unavailable test condition.</td><td>Provider's controlled test error</td><td>VWO displays a clear recovery outcome, does not expose sensitive provider diagnostics, and permits a supported retry where applicable.</td><td></td><td></td><td></td></tr>
+      </tbody></table>
+      <p class="execution"><strong>Environment/build:</strong> ______ &nbsp; <strong>Browser/OS:</strong> ______ &nbsp; <strong>Executed by/date:</strong> ______</p>
+    </article>
+
+    <article class="case" id="tc-016">
+      <h3>TC-VWO-016 — Password reset request</h3>
+      <div class="case-meta"><span class="pill">REQ: Forgot password / Email recovery</span><span class="pill">Functional · Security</span><span class="pill">P0</span></div>
+      <p><strong>Objective:</strong> Verify an eligible user can request password recovery and receive the configured next step.</p>
+      <p><strong>Preconditions:</strong> Recovery flow and email delivery are available in the approved environment; mailbox is a synthetic test mailbox.</p>
+      <table><thead><tr><th>#</th><th>Action</th><th>Test data</th><th>Expected result</th><th>Actual result</th><th>Status</th><th>Defect / evidence</th></tr></thead><tbody>
+        <tr><td>1</td><td>Open Forgot Password and submit an eligible synthetic account address.</td><td>Authorized test mailbox</td><td>Request is accepted; the user receives clear next-step feedback without exposing a reset secret on screen.</td><td></td><td></td><td></td></tr>
+        <tr><td>2</td><td>Check the authorized test mailbox for the recovery message.</td><td>Test mailbox only</td><td>Recovery message is delivered through the configured channel and directs the user to the approved secure reset flow.</td><td></td><td></td><td></td></tr>
+        <tr><td>3</td><td>Submit a non-enrolled reserved test address, if permitted by policy.</td><td>Nonexistent reserved test-domain address</td><td>Response follows the approved account privacy policy; no account details are disclosed.</td><td></td><td></td><td></td></tr>
+      </tbody></table>
+      <p class="execution"><strong>Environment/build:</strong> ______ &nbsp; <strong>Browser/OS:</strong> ______ &nbsp; <strong>Executed by/date:</strong> ______</p>
+    </article>
+
+    <article class="case" id="tc-017">
+      <h3>TC-VWO-017 — Reset token validity and reuse</h3>
+      <div class="case-meta"><span class="pill">REQ: Secure reset-token generation</span><span class="pill">Functional · Security · Boundary</span><span class="pill">P0</span></div>
+      <p><strong>Objective:</strong> Verify reset links/tokens are accepted or rejected according to the approved token policy.</p>
+      <p><strong>Preconditions:</strong> Reset-token expiration and single-use policy are documented; test mailbox and synthetic account are available.</p>
+      <table><thead><tr><th>#</th><th>Action</th><th>Test data</th><th>Expected result</th><th>Actual result</th><th>Status</th><th>Defect / evidence</th></tr></thead><tbody>
+        <tr><td>1</td><td>Open a newly issued reset link and submit an acceptable new password.</td><td>Fresh authorized test token</td><td>Token is accepted within its validity period; password update confirmation is clear.</td><td></td><td></td><td></td></tr>
+        <tr><td>2</td><td>Attempt to use the same token again after successful reset.</td><td>Previously used test token</td><td>Reused token is rejected if the approved policy is single-use; no second unauthorized password change occurs.</td><td></td><td></td><td></td></tr>
+        <tr><td>3</td><td>Test an expired and a malformed token using approved test fixtures.</td><td>Expired/invalid synthetic token fixtures</td><td>Invalid or expired tokens are rejected with safe recovery guidance and no account change.</td><td></td><td></td><td></td></tr>
+      </tbody></table>
+      <p class="execution"><strong>Environment/build:</strong> ______ &nbsp; <strong>Browser/OS:</strong> ______ &nbsp; <strong>Executed by/date:</strong> ______</p>
+    </article>
+
+    <article class="case" id="tc-018">
+      <h3>TC-VWO-018 — Password policy enforcement</h3>
+      <div class="case-meta"><span class="pill">REQ: Enforced password requirements</span><span class="pill">Functional · Boundary · Negative</span><span class="pill">P0</span></div>
+      <p><strong>Objective:</strong> Verify reset/new-password submissions enforce the published complexity requirements.</p>
+      <p><strong>Preconditions:</strong> Product/security has supplied password rules, length boundaries, and allowed-character policy; reset flow is available.</p>
+      <table><thead><tr><th>#</th><th>Action</th><th>Test data</th><th>Expected result</th><th>Actual result</th><th>Status</th><th>Defect / evidence</th></tr></thead><tbody>
+        <tr><td>1</td><td>Submit synthetic values immediately below, at, and above each documented boundary.</td><td>Boundary values derived from approved policy</td><td>Acceptance/rejection matches the documented boundary; field guidance identifies the requirement that needs correction.</td><td></td><td></td><td></td></tr>
+        <tr><td>2</td><td>Submit a value meeting all documented rules, then authenticate using the updated test secret.</td><td>Compliant synthetic value held in approved vault</td><td>Update succeeds and the new credential can be used; old-credential behavior follows the approved policy.</td><td></td><td></td><td></td></tr>
+      </tbody></table>
+      <p class="execution"><strong>Environment/build:</strong> ______ &nbsp; <strong>Browser/OS:</strong> ______ &nbsp; <strong>Executed by/date:</strong> ______</p>
+    </article>
+
+    <article class="case" id="tc-019">
+      <h3>TC-VWO-019 — Free-trial registration link</h3>
+      <div class="case-meta"><span class="pill">REQ: Account registration / New user journey</span><span class="pill">Functional · Navigation</span><span class="pill">P1</span></div>
+      <p><strong>Objective:</strong> Confirm a new visitor can reach the free-trial registration path from login.</p>
+      <p><strong>Preconditions:</strong> Login page is available; approved registration destination is known.</p>
+      <table><thead><tr><th>#</th><th>Action</th><th>Test data</th><th>Expected result</th><th>Actual result</th><th>Status</th><th>Defect / evidence</th></tr></thead><tbody>
+        <tr><td>1</td><td>Select the free-trial/sign-up link.</td><td>Unauthenticated browser</td><td>Registration destination opens correctly; link is visibly identifiable and keyboard accessible.</td><td></td><td></td><td></td></tr>
+        <tr><td>2</td><td>Use the supported return path to revisit login.</td><td>Browser back or provided link</td><td>Login page remains accessible and is not left in a broken or unintended authenticated state.</td><td></td><td></td><td></td></tr>
+      </tbody></table>
+      <p class="execution"><strong>Environment/build:</strong> ______ &nbsp; <strong>Browser/OS:</strong> ______ &nbsp; <strong>Executed by/date:</strong> ______</p>
+    </article>
+
+    <article class="case" id="tc-020">
+      <h3>TC-VWO-020 — Post-login destination and return context</h3>
+      <div class="case-meta"><span class="pill">REQ: Platform integration / Returning user journey</span><span class="pill">Functional · E2E</span><span class="pill">P1</span></div>
+      <p><strong>Objective:</strong> Verify successful sign-in transitions to the appropriate VWO destination and preserves supported context.</p>
+      <p><strong>Preconditions:</strong> Authorized synthetic account and documented starting/return destination are available.</p>
+      <table><thead><tr><th>#</th><th>Action</th><th>Test data</th><th>Expected result</th><th>Actual result</th><th>Status</th><th>Defect / evidence</th></tr></thead><tbody>
+        <tr><td>1</td><td>Start login from the normal entry point and authenticate successfully.</td><td>Approved synthetic account</td><td>User reaches the personalized VWO dashboard or assigned landing destination.</td><td></td><td></td><td></td></tr>
+        <tr><td>2</td><td>Where a supported protected destination initiated login, complete sign-in.</td><td>Approved return destination</td><td>User returns only to the expected authorized VWO destination; no unintended external or unauthorized redirect occurs.</td><td></td><td></td><td></td></tr>
+        <tr><td>3</td><td>Review the resulting account context and any available recent-activity context.</td><td>Test workspace with known synthetic state</td><td>Displayed account context corresponds to the authenticated test identity; any preserved activity follows the supported product behavior.</td><td></td><td></td><td></td></tr>
+      </tbody></table>
+      <p class="execution"><strong>Environment/build:</strong> ______ &nbsp; <strong>Browser/OS:</strong> ______ &nbsp; <strong>Executed by/date:</strong> ______</p>
+    </article>
+  </section>
+
+  <section class="group">
+    <h2>Experience, accessibility, and compatibility</h2>
+
+    <article class="case" id="tc-021">
+      <h3>TC-VWO-021 — Responsive layout and touch interaction</h3>
+      <div class="case-meta"><span class="pill">REQ: Responsive design / Mobile optimization</span><span class="pill">UI · Usability · Compatibility</span><span class="pill">P1</span></div>
+      <p><strong>Objective:</strong> Verify the login screen adapts to mobile/tablet/desktop viewports and is usable with touch.</p>
+      <p><strong>Preconditions:</strong> Approved browser/device matrix is available; use viewport sizes from that matrix.</p>
+      <table><thead><tr><th>#</th><th>Action</th><th>Test data</th><th>Expected result</th><th>Actual result</th><th>Status</th><th>Defect / evidence</th></tr></thead><tbody>
+        <tr><td>1</td><td>Open the login page at representative phone, tablet, and desktop sizes.</td><td>Supported viewport/device matrix</td><td>Fields, primary action, Remember Me, recovery/registration links, and announcement remain visible and usable without unintended horizontal overflow or overlap.</td><td></td><td></td><td></td></tr>
+        <tr><td>2</td><td>Enter credentials and activate controls using touch on a supported mobile device.</td><td>Synthetic test account; touch input</td><td>Controls are operable and touch-friendly; on-screen keyboard does not obscure the active field or required action.</td><td></td><td></td><td></td></tr>
+      </tbody></table>
+      <p class="execution"><strong>Environment/build:</strong> ______ &nbsp; <strong>Browser/OS:</strong> ______ &nbsp; <strong>Executed by/date:</strong> ______</p>
+    </article>
+
+    <article class="case" id="tc-022">
+      <h3>TC-VWO-022 — Light/dark theme behavior</h3>
+      <div class="case-meta"><span class="pill">REQ: Theme support / Product announcement</span><span class="pill">UI · Usability</span><span class="pill">P2</span></div>
+      <p><strong>Objective:</strong> Verify available light/dark theme options are readable and do not break login interactions.</p>
+      <p><strong>Preconditions:</strong> Theme option/announcement is present and the supported selection behavior is documented.</p>
+      <table><thead><tr><th>#</th><th>Action</th><th>Test data</th><th>Expected result</th><th>Actual result</th><th>Status</th><th>Defect / evidence</th></tr></thead><tbody>
+        <tr><td>1</td><td>Inspect the default theme, then select each available theme option.</td><td>Light and dark modes, if enabled</td><td>Theme changes as presented; text, form fields, errors, focus indicators, links, and announcement remain readable and usable.</td><td></td><td></td><td></td></tr>
+        <tr><td>2</td><td>Reload or revisit the page to observe theme persistence.</td><td>Selected theme</td><td>Persistence or reset behavior follows the documented product behavior; no unrequested persistence is assumed.</td><td></td><td></td><td></td></tr>
+      </tbody></table>
+      <p class="execution"><strong>Environment/build:</strong> ______ &nbsp; <strong>Browser/OS:</strong> ______ &nbsp; <strong>Executed by/date:</strong> ______</p>
+    </article>
+
+    <article class="case" id="tc-023">
+      <h3>TC-VWO-023 — Keyboard-only operation</h3>
+      <div class="case-meta"><span class="pill">REQ: Full keyboard navigation</span><span class="pill">Accessibility · WCAG 2.1 AA</span><span class="pill">P1</span></div>
+      <p><strong>Objective:</strong> Check that all login-page actions can be completed without a pointer.</p>
+      <p><strong>Preconditions:</strong> Login page is open; physical or software keyboard is available.</p>
+      <table><thead><tr><th>#</th><th>Action</th><th>Test data</th><th>Expected result</th><th>Actual result</th><th>Status</th><th>Defect / evidence</th></tr></thead><tbody>
+        <tr><td>1</td><td>Use Tab/Shift+Tab to traverse fields, Remember Me, submit, recovery, registration, and available theme/support controls.</td><td>Keyboard only</td><td>Interactive controls are reachable in a logical order; focus remains visible and does not become trapped.</td><td></td><td></td><td></td></tr>
+        <tr><td>2</td><td>Enter synthetic values and submit with the supported keyboard action.</td><td>Approved synthetic account</td><td>Form can be submitted without a pointer and follows the same validation/authentication behavior.</td><td></td><td></td><td></td></tr>
+        <tr><td>3</td><td>Trigger a validation/authentication error and navigate to it using the keyboard.</td><td>Malformed email or invalid test credentials</td><td>Error is perceivable and associated with the relevant form control or status region.</td><td></td><td></td><td></td></tr>
+      </tbody></table>
+      <p class="execution"><strong>Environment/build:</strong> ______ &nbsp; <strong>Browser/OS:</strong> ______ &nbsp; <strong>Executed by/date:</strong> ______</p>
+    </article>
+
+    <article class="case" id="tc-024">
+      <h3>TC-VWO-024 — Screen-reader labels and status feedback</h3>
+      <div class="case-meta"><span class="pill">REQ: ARIA / Screen reader support</span><span class="pill">Accessibility · WCAG 2.1 AA</span><span class="pill">P1</span></div>
+      <p><strong>Objective:</strong> Verify assistive technology can identify fields, controls, and dynamic feedback.</p>
+      <p><strong>Preconditions:</strong> Supported screen reader/browser combination from the accessibility test matrix is available.</p>
+      <table><thead><tr><th>#</th><th>Action</th><th>Test data</th><th>Expected result</th><th>Actual result</th><th>Status</th><th>Defect / evidence</th></tr></thead><tbody>
+        <tr><td>1</td><td>Navigate the login page with a screen reader and inspect announced names, roles, and states.</td><td>Approved assistive technology/browser pair</td><td>Email/password, Remember Me, submit, recovery, registration, and other controls have meaningful accessible names and states.</td><td></td><td></td><td></td></tr>
+        <tr><td>2</td><td>Cause field validation and an authentication/loading status.</td><td>Malformed email; invalid credentials; loading action</td><td>Relevant error and status feedback is announced in context without requiring visual-only interpretation.</td><td></td><td></td><td></td></tr>
+      </tbody></table>
+      <p class="execution"><strong>Environment/build:</strong> ______ &nbsp; <strong>Browser/OS:</strong> ______ &nbsp; <strong>Executed by/date:</strong> ______</p>
+    </article>
+
+    <article class="case" id="tc-025">
+      <h3>TC-VWO-025 — Contrast and high-contrast usability</h3>
+      <div class="case-meta"><span class="pill">REQ: High contrast / WCAG 2.1 AA</span><span class="pill">Accessibility · Visual</span><span class="pill">P1</span></div>
+      <p><strong>Objective:</strong> Verify text, controls, errors, and focus remain perceivable under supported contrast settings.</p>
+      <p><strong>Preconditions:</strong> Supported high-contrast mode and accessibility evaluation criteria are available.</p>
+      <table><thead><tr><th>#</th><th>Action</th><th>Test data</th><th>Expected result</th><th>Actual result</th><th>Status</th><th>Defect / evidence</th></tr></thead><tbody>
+        <tr><td>1</td><td>Review normal text, field boundaries, links, buttons, focus, and validation states against the approved WCAG 2.1 AA criteria.</td><td>Approved accessibility evaluation method</td><td>Applicable contrast and perceivability criteria pass; any failures are recorded with affected component/state.</td><td></td><td></td><td></td></tr>
+        <tr><td>2</td><td>Enable supported operating-system/browser high-contrast settings and repeat key interactions.</td><td>High-contrast mode</td><td>Essential information and controls remain available and operable without color being the only indicator.</td><td></td><td></td><td></td></tr>
+      </tbody></table>
+      <p class="execution"><strong>Environment/build:</strong> ______ &nbsp; <strong>Browser/OS:</strong> ______ &nbsp; <strong>Executed by/date:</strong> ______</p>
+    </article>
+
+    <article class="case" id="tc-035">
+      <h3>TC-VWO-035 — Browser and device compatibility</h3>
+      <div class="case-meta"><span class="pill">REQ: Responsive / Cross-platform support</span><span class="pill">Compatibility · Regression</span><span class="pill">P1</span></div>
+      <p><strong>Objective:</strong> Confirm critical login and recovery experience works across the product-supported environments.</p>
+      <p><strong>Preconditions:</strong> Product owner has confirmed supported browser/OS versions and device matrix.</p>
+      <table><thead><tr><th>#</th><th>Action</th><th>Test data</th><th>Expected result</th><th>Actual result</th><th>Status</th><th>Defect / evidence</th></tr></thead><tbody>
+        <tr><td>1</td><td>On each supported browser/OS/device combination, open login and inspect layout/controls.</td><td>Approved compatibility matrix</td><td>Page, branding, controls, and responsive layout render and function consistently within supported combinations.</td><td></td><td></td><td></td></tr>
+        <tr><td>2</td><td>Run a valid-login attempt and a recovery/navigation check on each representative combination.</td><td>Approved synthetic account</td><td>Critical access and recovery flows complete without browser-specific blocking behavior.</td><td></td><td></td><td></td></tr>
+      </tbody></table>
+      <p class="execution"><strong>Environment/build:</strong> ______ &nbsp; <strong>Browser/OS:</strong> ______ &nbsp; <strong>Executed by/date:</strong> ______</p>
+    </article>
+  </section>
+
+  <section class="group">
+    <h2>Security, privacy, and integrations</h2>
+
+    <article class="case" id="tc-026">
+      <h3>TC-VWO-026 — HTTPS enforcement</h3>
+      <div class="case-meta"><span class="pill">REQ: HTTPS / TLS protection</span><span class="pill">Security · Compliance</span><span class="pill">P0</span></div>
+      <p><strong>Objective:</strong> Verify login communication is served securely and insecure entry is redirected or blocked.</p>
+      <p><strong>Preconditions:</strong> Authorized environment and security review access; no credentials are entered through an insecure URL.</p>
+      <table><thead><tr><th>#</th><th>Action</th><th>Test data</th><th>Expected result</th><th>Actual result</th><th>Status</th><th>Defect / evidence</th></tr></thead><tbody>
+        <tr><td>1</td><td>Open the approved HTTPS login address and inspect the browser security indicator.</td><td>HTTPS environment URL</td><td>Connection is secure and certificate status is valid for the environment.</td><td></td><td></td><td></td></tr>
+        <tr><td>2</td><td>Navigate to the corresponding HTTP entry point without submitting credentials.</td><td>HTTP URL, if exposed for testing</td><td>Request is redirected to HTTPS or refused; credentials are never requested or transmitted over HTTP.</td><td></td><td></td><td></td></tr>
+      </tbody></table>
+      <p class="execution"><strong>Environment/build:</strong> ______ &nbsp; <strong>Browser/OS:</strong> ______ &nbsp; <strong>Executed by/date:</strong> ______</p>
+    </article>
+
+    <article class="case" id="tc-027">
+      <h3>TC-VWO-027 — Credential and session-data protection</h3>
+      <div class="case-meta"><span class="pill">REQ: Data protection / Secure session management</span><span class="pill">Security · Privacy</span><span class="pill">P0</span></div>
+      <p><strong>Objective:</strong> Confirm credentials and session secrets are not exposed in page URLs or approved diagnostic evidence, and session handling follows security policy.</p>
+      <p><strong>Preconditions:</strong> Authorized test account; approved security checklist and restricted diagnostic access; use synthetic secrets only.</p>
+      <table><thead><tr><th>#</th><th>Action</th><th>Test data</th><th>Expected result</th><th>Actual result</th><th>Status</th><th>Defect / evidence</th></tr></thead><tbody>
+        <tr><td>1</td><td>Perform a synthetic login and inspect the browser address bar and approved request/diagnostic view.</td><td>Synthetic account only</td><td>Password and session secrets are not placed in the URL or exposed in user-facing content; submitted authentication data uses the approved secure transport.</td><td></td><td></td><td></td></tr>
+        <tr><td>2</td><td>Review session token attributes and lifecycle against the approved security policy using authorized access.</td><td>Security checklist; do not copy token values</td><td>Token generation, storage attributes, rotation/expiry, and invalidation meet documented policy; no token value is included in evidence.</td><td></td><td></td><td></td></tr>
+        <tr><td>3</td><td>Sign out or let the test session expire, then revisit a protected destination.</td><td>Expired/ended synthetic session</td><td>Ended session no longer grants protected access, consistent with the session policy.</td><td></td><td></td><td></td></tr>
+      </tbody></table>
+      <p class="execution"><strong>Environment/build:</strong> ______ &nbsp; <strong>Browser/OS:</strong> ______ &nbsp; <strong>Executed by/date:</strong> ______</p>
+    </article>
+
+    <article class="case" id="tc-028">
+      <h3>TC-VWO-028 — Authentication rate limiting</h3>
+      <div class="case-meta"><span class="pill">REQ: Rate limiting / Brute-force protection</span><span class="pill">Security · Negative</span><span class="pill">P0</span></div>
+      <p><strong>Objective:</strong> Verify configured request throttling provides protection and safe recovery for repeated failed sign-in attempts.</p>
+      <p><strong>Preconditions:</strong> Written authorization, isolated synthetic test identity, approved test window, threshold/response policy, and stop condition are confirmed. Do not run uncontrolled or high-volume attempts.</p>
+      <table><thead><tr><th>#</th><th>Action</th><th>Test data</th><th>Expected result</th><th>Actual result</th><th>Status</th><th>Defect / evidence</th></tr></thead><tbody>
+        <tr><td>1</td><td>Make only the approved bounded sequence of invalid sign-in attempts, stopping at the agreed threshold.</td><td>Dedicated synthetic identity; approved attempt count</td><td>Configured throttling/protective response activates at the documented threshold; no access is granted by invalid credentials.</td><td></td><td></td><td></td></tr>
+        <tr><td>2</td><td>Observe the user-facing response and follow the approved recovery path after the restriction window.</td><td>Configured recovery/wait interval</td><td>Feedback is actionable without exposing sensitive system details; access recovers according to policy. No threshold or lockout duration is assumed if undocumented.</td><td></td><td></td><td></td></tr>
+      </tbody></table>
+      <p class="execution"><strong>Environment/build:</strong> ______ &nbsp; <strong>Browser/OS:</strong> ______ &nbsp; <strong>Executed by/date:</strong> ______</p>
+    </article>
+
+    <article class="case" id="tc-029">
+      <h3>TC-VWO-029 — Privacy and audit handling</h3>
+      <div class="case-meta"><span class="pill">REQ: GDPR/CCPA / Enterprise audit requirements</span><span class="pill">Compliance · Security</span><span class="pill">P1</span></div>
+      <p><strong>Objective:</strong> Review authentication data handling and audit evidence against applicable approved privacy/compliance requirements.</p>
+      <p><strong>Preconditions:</strong> Applicable privacy requirements, retention policy, audit controls, and authorized evidence sources are supplied by the responsible owners.</p>
+      <table><thead><tr><th>#</th><th>Action</th><th>Test data</th><th>Expected result</th><th>Actual result</th><th>Status</th><th>Defect / evidence</th></tr></thead><tbody>
+        <tr><td>1</td><td>Review approved records for a synthetic successful and failed login.</td><td>Synthetic test account; approved audit/analytics records</td><td>Required events are traceable per policy, access is limited to authorized roles, and passwords/tokens are not recorded as event data.</td><td></td><td></td><td></td></tr>
+        <tr><td>2</td><td>Review documented handling, retention, and applicable user-data request processes with the privacy owner.</td><td>Approved compliance evidence</td><td>Evidence supports the applicable GDPR/CCPA and enterprise requirements; gaps are recorded for owner review rather than inferred from UI behavior alone.</td><td></td><td></td><td></td></tr>
+      </tbody></table>
+      <p class="execution"><strong>Environment/build:</strong> ______ &nbsp; <strong>Browser/OS:</strong> ______ &nbsp; <strong>Executed by/date:</strong> ______</p>
+    </article>
+
+    <article class="case" id="tc-030">
+      <h3>TC-VWO-030 — Login analytics events</h3>
+      <div class="case-meta"><span class="pill">REQ: Login success/failure tracking</span><span class="pill">Integration · Data quality · Privacy</span><span class="pill">P1</span></div>
+      <p><strong>Objective:</strong> Verify authentication outcomes are recorded for platform optimization without capturing secrets.</p>
+      <p><strong>Preconditions:</strong> Analytics integration is enabled; authorized event inspection access and event definitions are available.</p>
+      <table><thead><tr><th>#</th><th>Action</th><th>Test data</th><th>Expected result</th><th>Actual result</th><th>Status</th><th>Defect / evidence</th></tr></thead><tbody>
+        <tr><td>1</td><td>Complete one successful login and one failed login using a synthetic account.</td><td>Synthetic identity; no real user data</td><td>Expected success/failure events are recorded once per outcome with fields matching the approved event definition.</td><td></td><td></td><td></td></tr>
+        <tr><td>2</td><td>Inspect authorized event records for credential or session values.</td><td>Approved analytics view</td><td>No password, reset token, or session secret is present; event data follows privacy policy.</td><td></td><td></td><td></td></tr>
+      </tbody></table>
+      <p class="execution"><strong>Environment/build:</strong> ______ &nbsp; <strong>Browser/OS:</strong> ______ &nbsp; <strong>Executed by/date:</strong> ______</p>
+    </article>
+
+    <article class="case" id="tc-031">
+      <h3>TC-VWO-031 — Login support path</h3>
+      <div class="case-meta"><span class="pill">REQ: Customer support integration / Error recovery</span><span class="pill">Functional · Integration · Usability</span><span class="pill">P2</span></div>
+      <p><strong>Objective:</strong> Check that a user who cannot sign in can reach the configured support assistance path.</p>
+      <p><strong>Preconditions:</strong> Support link or contact path is configured for the environment; no actual support ticket with personal data will be submitted.</p>
+      <table><thead><tr><th>#</th><th>Action</th><th>Test data</th><th>Expected result</th><th>Actual result</th><th>Status</th><th>Defect / evidence</th></tr></thead><tbody>
+        <tr><td>1</td><td>Locate and activate the login assistance/support entry point.</td><td>Unauthenticated browser</td><td>Support destination opens correctly and provides a clear next step for login assistance.</td><td></td><td></td><td></td></tr>
+        <tr><td>2</td><td>Review the transition for exposure of entered login values.</td><td>Synthetic/non-sensitive form values only</td><td>Credentials and secrets are not unintentionally copied into support URLs or prefilled content.</td><td></td><td></td><td></td></tr>
+      </tbody></table>
+      <p class="execution"><strong>Environment/build:</strong> ______ &nbsp; <strong>Browser/OS:</strong> ______ &nbsp; <strong>Executed by/date:</strong> ______</p>
+    </article>
+
+    <article class="case" id="tc-036">
+      <h3>TC-VWO-036 — Optional social login</h3>
+      <div class="case-meta"><span class="pill">REQ: Optional Google/Microsoft/other identity provider login</span><span class="pill">Integration · Conditional</span><span class="pill">P2</span></div>
+      <p><strong>Objective:</strong> Verify configured social identity login succeeds or fails safely.</p>
+      <p><strong>Preconditions:</strong> Social provider option is implemented and enabled in the approved test environment; provider test identity is authorized.</p>
+      <table><thead><tr><th>#</th><th>Action</th><th>Test data</th><th>Expected result</th><th>Actual result</th><th>Status</th><th>Defect / evidence</th></tr></thead><tbody>
+        <tr><td>1</td><td>Select the configured provider and complete its approved test sign-in.</td><td>Provider synthetic identity</td><td>Successful provider authentication returns to VWO and maps to the expected authorized account.</td><td></td><td></td><td></td></tr>
+        <tr><td>2</td><td>Cancel provider sign-in or use a controlled provider failure.</td><td>Provider test cancellation/error</td><td>No VWO access is granted; the user receives a clear safe recovery outcome.</td><td></td><td></td><td></td></tr>
+      </tbody></table>
+      <p class="execution"><strong>Environment/build:</strong> ______ &nbsp; <strong>Browser/OS:</strong> ______ &nbsp; <strong>Executed by/date:</strong> ______</p>
+    </article>
+  </section>
+
+  <section class="group">
+    <h2>Performance, availability, and resilience</h2>
+
+    <article class="case" id="tc-032">
+      <h3>TC-VWO-032 — Login page load-time target</h3>
+      <div class="case-meta"><span class="pill">REQ: Page load under 2 seconds</span><span class="pill">Performance</span><span class="pill">P1</span></div>
+      <p><strong>Objective:</strong> Measure whether the login page meets the PRD target on a standard connection.</p>
+      <p><strong>Preconditions:</strong> Standard connection and measurement start/end definitions are agreed; environment/build and measurement method are approved.</p>
+      <table><thead><tr><th>#</th><th>Action</th><th>Test data</th><th>Expected result</th><th>Actual result</th><th>Status</th><th>Defect / evidence</th></tr></thead><tbody>
+        <tr><td>1</td><td>Load the login page under the agreed standard connection and record the defined page-load measurement.</td><td>Agreed standard connection; clean test session</td><td>Measured page load is under 2 seconds for the agreed metric/conditions; report the metric definition and observations.</td><td></td><td></td><td></td></tr>
+        <tr><td>2</td><td>Repeat the agreed number of observations and record each result.</td><td>Approved repeat count and measurement window</td><td>Results are reported transparently, including outliers; no undocumented aggregation rule is applied.</td><td></td><td></td><td></td></tr>
+      </tbody></table>
+      <p class="execution"><strong>Environment/build:</strong> ______ &nbsp; <strong>Browser/OS:</strong> ______ &nbsp; <strong>Executed by/date:</strong> ______</p>
+    </article>
+
+    <article class="case" id="tc-033">
+      <h3>TC-VWO-033 — Concurrent login capacity</h3>
+      <div class="case-meta"><span class="pill">REQ: Thousands of concurrent login attempts</span><span class="pill">Performance · Scalability</span><span class="pill">P1</span></div>
+      <p><strong>Objective:</strong> Assess login behavior against the approved concurrency profile and capacity objective.</p>
+      <p><strong>Preconditions:</strong> Written authorization, isolated performance environment, synthetic account pool, agreed load profile representing the PRD's thousands-of-users objective, monitoring, and stop conditions are approved.</p>
+      <table><thead><tr><th>#</th><th>Action</th><th>Test data</th><th>Expected result</th><th>Actual result</th><th>Status</th><th>Defect / evidence</th></tr></thead><tbody>
+        <tr><td>1</td><td>Have the authorized performance owner execute the agreed concurrent sign-in profile in the isolated environment.</td><td>Approved profile and synthetic accounts only</td><td>Observed availability, response times, error rates, and saturation points are recorded against agreed acceptance thresholds; no unapproved traffic is generated.</td><td></td><td></td><td></td></tr>
+        <tr><td>2</td><td>Review the run summary and monitoring evidence with the service owner.</td><td>Approved performance report</td><td>Report states achieved concurrency and any deviations; acceptance is assessed against thresholds agreed before the run.</td><td></td><td></td><td></td></tr>
+      </tbody></table>
+      <p class="execution"><strong>Environment/build:</strong> ______ &nbsp; <strong>Browser/OS:</strong> ______ &nbsp; <strong>Executed by/date:</strong> ______</p>
+    </article>
+
+    <article class="case" id="tc-034">
+      <h3>TC-VWO-034 — Availability and regional access evidence</h3>
+      <div class="case-meta"><span class="pill">REQ: 99.9% availability / Geographic distribution</span><span class="pill">Reliability · Performance</span><span class="pill">P1</span></div>
+      <p><strong>Objective:</strong> Review service availability and regional performance evidence against the PRD objectives.</p>
+      <p><strong>Preconditions:</strong> Availability measurement window, calculation method, approved regional observation points, and monitoring evidence source are defined by the service owner.</p>
+      <table><thead><tr><th>#</th><th>Action</th><th>Test data</th><th>Expected result</th><th>Actual result</th><th>Status</th><th>Defect / evidence</th></tr></thead><tbody>
+        <tr><td>1</td><td>Review the agreed availability report for the defined measurement window.</td><td>Approved monitoring report</td><td>Availability is assessed against the 99.9% objective using the agreed calculation and exclusions.</td><td></td><td></td><td></td></tr>
+        <tr><td>2</td><td>Compare login access/performance observations from approved geographic regions.</td><td>Approved regional test locations</td><td>Regional behavior and exceptions are documented; no unsupported guarantee is inferred where a target/measurement is not defined.</td><td></td><td></td><td></td></tr>
+      </tbody></table>
+      <p class="execution"><strong>Environment/build:</strong> ______ &nbsp; <strong>Browser/OS:</strong> ______ &nbsp; <strong>Executed by/date:</strong> ______</p>
+    </article>
+
+    <article class="case" id="tc-037">
+      <h3>TC-VWO-037 — Asset delivery and optimization</h3>
+      <div class="case-meta"><span class="pill">REQ: Compressed assets / Minified CSS/JS / CDN</span><span class="pill">Performance · Integration</span><span class="pill">P2</span></div>
+      <p><strong>Objective:</strong> Review approved delivery evidence that login-page assets use the required optimization and CDN practices.</p>
+      <p><strong>Preconditions:</strong> Authorized access to the environment's asset-delivery evidence and the project asset/CDN policy.</p>
+      <table><thead><tr><th>#</th><th>Action</th><th>Test data</th><th>Expected result</th><th>Actual result</th><th>Status</th><th>Defect / evidence</th></tr></thead><tbody>
+        <tr><td>1</td><td>Review served login-page resources and compare them with the approved asset policy.</td><td>QA/pre-production page; approved policy</td><td>Applicable images are compressed and CSS/JavaScript are minified as required; any exceptions are documented by the owner.</td><td></td><td></td><td></td></tr>
+        <tr><td>2</td><td>Review delivery configuration/evidence for CDN use and approved regional behavior.</td><td>Approved infrastructure evidence</td><td>CDN integration is evidenced for the login assets as specified; issues are recorded for the responsible team.</td><td></td><td></td><td></td></tr>
+      </tbody></table>
+      <p class="execution"><strong>Environment/build:</strong> ______ &nbsp; <strong>Browser/OS:</strong> ______ &nbsp; <strong>Executed by/date:</strong> ______</p>
+    </article>
+
+    <article class="case" id="tc-038">
+      <h3>TC-VWO-038 — Authentication dependency failure recovery</h3>
+      <div class="case-meta"><span class="pill">REQ: Error recovery / Third-party integrations</span><span class="pill">Integration · Resilience</span><span class="pill">P1</span></div>
+      <p><strong>Objective:</strong> Verify safe user feedback when an approved authentication dependency is unavailable.</p>
+      <p><strong>Preconditions:</strong> Controlled dependency-failure simulation is authorized in an isolated test environment; service owner has approved the procedure and rollback.</p>
+      <table><thead><tr><th>#</th><th>Action</th><th>Test data</th><th>Expected result</th><th>Actual result</th><th>Status</th><th>Defect / evidence</th></tr></thead><tbody>
+        <tr><td>1</td><td>With the service owner's controlled failure condition active, attempt a test sign-in.</td><td>Synthetic account; approved dependency simulation</td><td>Login does not falsely report success; user receives a clear safe error/retry path without internal diagnostics or credential exposure.</td><td></td><td></td><td></td></tr>
+        <tr><td>2</td><td>Restore the dependency and retry using the approved test account.</td><td>Dependency restored</td><td>Login returns to the expected behavior and no stale error/loading state blocks the user.</td><td></td><td></td><td></td></tr>
+      </tbody></table>
+      <p class="execution"><strong>Environment/build:</strong> ______ &nbsp; <strong>Browser/OS:</strong> ______ &nbsp; <strong>Executed by/date:</strong> ______</p>
+    </article>
+  </section>
+
+  <section>
+    <h2>Execution sign-off</h2>
+    <table>
+      <thead><tr><th>Environment / build</th><th>Browser / OS</th><th>Executed by</th><th>Execution date</th><th>Reviewed by</th></tr></thead>
+      <tbody><tr><td style="height:34px"></td><td></td><td></td><td></td><td></td></tr></tbody>
+    </table>
+    <h3>Clarifications to resolve before dependent cases</h3>
+    <ul>
+      <li>Supported browser/OS versions and device matrix.</li>
+      <li>Password complexity rules, length boundaries, and strength-feedback behavior.</li>
+      <li>Remember Me semantics, session timeout values, and invalidation policy.</li>
+      <li>MFA methods/recovery options; configured SSO and social-login providers.</li>
+      <li>Account-enumeration messaging policy; reset-token lifetime and single-use behavior.</li>
+      <li>Rate-limit thresholds, recovery interval, approved performance/load profile, and measurement definitions.</li>
+      <li>Analytics event schema, privacy/retention evidence, and applicable accessibility evaluation method.</li>
+    </ul>
+  </section>
+  <footer>VWO Login Dashboard Test Cases · Suite version 1.0 · Derived from the user-supplied PRD. Use synthetic data and approved environments only.</footer>
+</main>
+</body>
+</html>
